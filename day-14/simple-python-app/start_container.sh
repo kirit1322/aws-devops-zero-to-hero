@@ -1,14 +1,14 @@
 #!/bin/bash
 set -e
 
-echo "Stopping existing container (if running)..."
-docker stop simple-flask-app || true
-docker rm simple-flask-app || true
+echo "Stopping any container running on port 5000..."
+docker ps -q --filter "publish=5000" | xargs -r docker stop
+docker ps -aq --filter "publish=5000" | xargs -r docker rm
 
-echo "Pulling latest Docker image..."
+echo "Pulling latest image..."
 docker pull kiritpatel1321/simple-python-flask-app
 
-echo "Running new container..."
+echo "Starting container..."
 docker run -d -p 5000:5000 --name simple-flask-app kiritpatel1321/simple-python-flask-app
 
-echo "Deployment completed successfully!"
+echo "Deployment completed!"
